@@ -1,0 +1,26 @@
+{
+  "name": "roots/wp-cli-theme-activation",
+  "description": "WP-CLI command for activating a theme and setting default options",
+  "type": "command",
+  "keywords": ["wp-cli", "wordpress"],
+  "homepage": "https://github.com/roots/wp-cli-theme-activation",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ben Word",
+      "email": "ben@benword.com",
+      "homepage": "https://github.com/retlehs"
+    },
+    {
+      "name": "Scott Walkinshaw",
+      "email": "scott.walkinshaw@gmail.com",
+      "homepage": "https://github.com/swalkinshaw"
+    }
+  ],
+  "require": {
+    "wp-cli/wp-cli": ">= 0.12"
+  },
+  "autoload": {
+    "files": ["theme-activation-command.php"]
+  }
+}
