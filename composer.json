@@ -17,6 +17,9 @@
       "homepage": "https://github.com/swalkinshaw"
     }
   ],
+  "require": {
+    "php": ">=5.4"
+  },
   "autoload": {
     "files": ["theme-activation-command.php"]
   }
