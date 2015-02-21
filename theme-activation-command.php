@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('WP_CLI')) {
+  return;
+}
+
 class Roots_Theme_Activation_Command extends WP_CLI_Command {
   /**
    * Roots Theme Activation options
