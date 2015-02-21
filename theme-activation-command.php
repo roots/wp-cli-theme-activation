@@ -1,10 +1,12 @@
 <?php
 
+namespace Roots\ThemeActivation;
+
 if (!defined('WP_CLI')) {
   return;
 }
 
-class Roots_Theme_Activation_Command extends WP_CLI_Command {
+class RootsThemeActivationCommand extends \WP_CLI_Command {
   /**
    * Roots Theme Activation options
    *
@@ -28,7 +30,7 @@ class Roots_Theme_Activation_Command extends WP_CLI_Command {
    *     wp roots options --show_on_front=page --permalink_structure='/%year%/%postname%/' --skip_navigation
    *
    */
-  function options($args, $options) {
+  public function options($args, $options) {
     list($name) = $args;
 
     $defaults = array(
@@ -70,4 +72,4 @@ class Roots_Theme_Activation_Command extends WP_CLI_Command {
   }
 }
 
-WP_CLI::add_command('roots', new Roots_Theme_Activation_Command);
+\WP_CLI::add_command('roots', new RootsThemeActivationCommand);
