@@ -2,7 +2,7 @@
 
 namespace Roots\ThemeActivation;
 
-if (!defined('WP_CLI')) {
+if (!defined('\WP_CLI')) {
   return;
 }
 
@@ -31,7 +31,7 @@ class RootsThemeActivationCommand extends \WP_CLI_Command {
    *
    */
   public function options($args, $options) {
-    list($name) = $args;
+    list($theme) = $args;
 
     $defaults = [
       'permalink_structure' => '/%postname%/',
@@ -42,7 +42,7 @@ class RootsThemeActivationCommand extends \WP_CLI_Command {
 
     $options = wp_parse_args($options, $defaults);
 
-    WP_CLI::log('Activating theme and setting options');
+    \WP_CLI::log('Activating theme and setting options');
 
     $home_page_options = [
       'post_content' => 'Lorem Ipsum',
@@ -52,23 +52,23 @@ class RootsThemeActivationCommand extends \WP_CLI_Command {
       'porcelain'    => true
     ];
 
-    WP_CLI::run_command(['theme', 'activate', $option['theme']]);
+    \WP_CLI::run_command(['theme', 'activate', $options['theme']]);
 
-    $home_page_id = WP_CLI::run_command(array('post', 'create'), $home_page_options);
+    // $home_page_id = \WP_CLI::run_command(array('post', 'create'), $home_page_options);
 
-    WP_CLI::run_command(['option', 'update', 'show_on_front', $option['show_on_front']]);
-    WP_CLI::run_command(['option', 'update', 'page_on_front', $home_page_id]);
+    // \WP_CLI::run_command(['option', 'update', 'show_on_front', $options['show_on_front']]);
+    // \WP_CLI::run_command(['option', 'update', 'page_on_front', $home_page_id]);
 
-    WP_CLI::run_command(['rewrite', 'structure', $option['permalink_structure']]);
-    WP_CLI::run_command(['rewrite', 'flush']);
+    \WP_CLI::run_command(['rewrite', 'structure', $options['permalink_structure']]);
+    \WP_CLI::run_command(['rewrite', 'flush']);
 
-    if (!empty($option['skip_navigation'])) {
-      WP_CLI::run_command(['menu', 'create', 'Primary Navigation']);
-      WP_CLI::run_command(['menu', 'location', 'assign', 'primary_navigation']);
-      WP_CLI::run_command(['menu', 'item', 'add-post', 'Primary Navigation', $home_page_id]);
+    if (!empty($options['skip_navigation'])) {
+      \WP_CLI::run_command(['menu', 'create', 'Primary Navigation']);
+      \WP_CLI::run_command(['menu', 'location', 'assign', 'primary_navigation']);
+      \WP_CLI::run_command(['menu', 'item', 'add-post', 'Primary Navigation', $home_page_id]);
     }
 
-    WP_CLI::success('Theme activated');
+    \WP_CLI::success('Theme activated');
   }
 }
 
