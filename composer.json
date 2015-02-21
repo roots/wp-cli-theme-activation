@@ -17,9 +17,6 @@
       "homepage": "https://github.com/swalkinshaw"
     }
   ],
-  "require": {
-    "wp-cli/wp-cli": ">= 0.12"
-  },
   "autoload": {
     "files": ["theme-activation-command.php"]
   }
