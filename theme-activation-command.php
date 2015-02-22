@@ -54,10 +54,10 @@ class RootsThemeActivationCommand extends \WP_CLI_Command {
 
     \WP_CLI::run_command(['theme', 'activate', $options['theme']]);
 
-    // $home_page_id = \WP_CLI::run_command(array('post', 'create'), $home_page_options);
-
-    // \WP_CLI::run_command(['option', 'update', 'show_on_front', $options['show_on_front']]);
-    // \WP_CLI::run_command(['option', 'update', 'page_on_front', $home_page_id]);
+    if ($home_page_id = wp_insert_post($home_page_options, false)) {
+      \WP_CLI::run_command(['option', 'update', 'show_on_front', $options['show_on_front']]);
+      \WP_CLI::run_command(['option', 'update', 'page_on_front', $home_page_id]);
+    }
 
     \WP_CLI::run_command(['rewrite', 'structure', $options['permalink_structure']]);
     \WP_CLI::run_command(['rewrite', 'flush']);
