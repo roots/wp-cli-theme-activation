@@ -64,7 +64,7 @@ class RootsThemeActivationCommand extends \WP_CLI_Command {
 
     if (!empty($options['skip_navigation'])) {
       \WP_CLI::run_command(['menu', 'create', 'Primary Navigation']);
-      \WP_CLI::run_command(['menu', 'location', 'assign', 'primary_navigation']);
+      \WP_CLI::run_command(['menu', 'location', 'assign', 'Primary Navigation', 'primary_navigation']);
       \WP_CLI::run_command(['menu', 'item', 'add-post', 'Primary Navigation', $home_page_id]);
     }
 
