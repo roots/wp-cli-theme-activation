@@ -1,18 +1,16 @@
-<?php
+<?php namespace Roots\WP_CLI\Commands;
 
-namespace Roots\ThemeActivation;
-
-if (!defined('\WP_CLI')) {
+if (!class_exists('\Theme_Command')) {
   return;
 }
 
-class RootsThemeActivationCommand extends \WP_CLI_Command {
+class Theme extends \Theme_Command {
   /**
-   * Theme activation options
+   * Theme activation
    *
    * ## OPTIONS
    *
-   * <theme>
+   * [<theme>]
    * : The theme name to activate. Defaults to 'sage'.
    *
    * [--show-on-front=<page-type>]
@@ -26,21 +24,24 @@ class RootsThemeActivationCommand extends \WP_CLI_Command {
    *
    * ## EXAMPLES
    *
-   *     wp theme-activation options
-   *     wp theme-activation options --show_on_front=page --permalink_structure='/%year%/%postname%/' --skip_navigation
+   *     wp theme activation
+   *     wp theme activation --show-on-front=page --permalink-structure='/%year%/%postname%/' --skip-navigation
    *
+   * @subcommand roots-activate
+   * @alias activation
    */
-  public function options($args, $options) {
-    list($theme) = $args;
+  public function roots_activate($args = [], $options = []) {
+    list($theme) = $args + ['sage'];
 
     $defaults = [
-      'permalink_structure' => '/%postname%/',
-      'show_on_front'       => 'page',
-      'skip_navigation'     => null,
-      'theme'               => 'sage'
+      'permalink-structure' => '/%postname%/',
+      'show-on-front'       => 'page',
+      'skip-navigation'     => false
     ];
 
     $options = wp_parse_args($options, $defaults);
+    
+    $options['skip-navigation'] = ($options['skip-navigation'] || !!wp_get_nav_menu_object('Primary Navigation'));
 
     \WP_CLI::log('Activating theme and setting options');
 
@@ -48,28 +49,34 @@ class RootsThemeActivationCommand extends \WP_CLI_Command {
       'post_content' => 'Lorem Ipsum',
       'post_status'  => 'publish',
       'post_title'   => 'Home',
-      'post_type'    => 'page',
-      'porcelain'    => true
+      'post_type'    => 'page'
     ];
-
-    \WP_CLI::run_command(['theme', 'activate', $options['theme']]);
+    
+    parent::activate([$theme]);
 
     if ($home_page_id = wp_insert_post($home_page_options, false)) {
-      \WP_CLI::run_command(['option', 'update', 'show_on_front', $options['show_on_front']]);
+      \WP_CLI::run_command(['option', 'update', 'show_on_front', $options['show-on-front']]);
       \WP_CLI::run_command(['option', 'update', 'page_on_front', $home_page_id]);
     }
 
-    \WP_CLI::run_command(['rewrite', 'structure', $options['permalink_structure']]);
-    \WP_CLI::run_command(['rewrite', 'flush']);
+    if (!$options['skip-navigation'] && $menu_id = wp_create_nav_menu('Primary Navigation')) {
+      $home_page_id && wp_update_nav_menu_item($menu_id, 0, [
+        'menu-item-title'     => $home_page_options['post_title'],
+        'menu-item-object'    => $home_page_options['post_type'],
+        'menu-item-object-id' => $home_page_id,
+        'menu-item-type'      => 'post_type',
+        'menu-item-status'    => 'publish'
+      ]);
+      set_theme_mod('nav_menu_locations', ['primary_navigation'=>$menu_id]);
 
-    if (!empty($options['skip_navigation'])) {
-      \WP_CLI::run_command(['menu', 'create', 'Primary Navigation']);
-      \WP_CLI::run_command(['menu', 'location', 'assign', 'Primary Navigation', 'primary_navigation']);
-      \WP_CLI::run_command(['menu', 'item', 'add-post', 'Primary Navigation', $home_page_id]);
+      \WP_CLI::success('Primary Navigation created.');
     }
+    
+    \WP_CLI::run_command(['rewrite', 'structure', $options['permalink-structure']]);
+    \WP_CLI::run_command(['rewrite', 'flush']);
 
     \WP_CLI::success('Theme activated');
   }
 }
 
-\WP_CLI::add_command('theme-activation', new RootsThemeActivationCommand);
+\WP_CLI::add_command('theme', __NAMESPACE__ . '\\Theme');
