@@ -27,10 +27,10 @@ class Theme extends \Theme_Command {
    *     wp theme activation
    *     wp theme activation --show-on-front=page --permalink-structure='/%year%/%postname%/' --skip-navigation
    *
-   * @subcommand roots-activate
-   * @alias activation
+   * @subcommand activation
+   * @alias roots-activate
    */
-  public function roots_activate($args = [], $options = []) {
+  public function activation($args = [], $options = []) {
     list($theme) = $args + ['sage'];
 
     $defaults = [
