@@ -1,6 +1,8 @@
+[![Build Status](https://travis-ci.org/roots/wp-cli-theme-activation.svg)](https://travis-ci.org/roots/wp-cli-theme-activation)
+
 ## Installation
 
-The quick and dirty method is to drop [theme-activation-command.php](https://raw.githubusercontent.com/roots/wp-cli-theme-activation/master/theme-activation-command.php) into your `/wp-content/mu-plugins/` directory.
+The quick and dirty method is to drop [theme-activation-command.php](https://raw.githubusercontent.com/roots/wp-cli-theme-activation/master/theme-activation-command.php) into your `/mu-plugins/` directory.
 
 For other methods, please refer to WP-CLI's [Community Packages](https://github.com/wp-cli/wp-cli/wiki/Community-Packages) wiki.
 
