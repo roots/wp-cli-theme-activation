@@ -40,7 +40,7 @@ class Theme extends \Theme_Command {
     ];
 
     $options = wp_parse_args($options, $defaults);
-    
+
     $options['skip-navigation'] = ($options['skip-navigation'] || !!wp_get_nav_menu_object('Primary Navigation'));
 
     \WP_CLI::log('Activating theme and setting options');
@@ -51,7 +51,7 @@ class Theme extends \Theme_Command {
       'post_title'   => 'Home',
       'post_type'    => 'page'
     ];
-    
+
     parent::activate([$theme]);
 
     if ($home_page_id = wp_insert_post($home_page_options, false)) {
@@ -67,11 +67,12 @@ class Theme extends \Theme_Command {
         'menu-item-type'      => 'post_type',
         'menu-item-status'    => 'publish'
       ]);
-      set_theme_mod('nav_menu_locations', ['primary_navigation'=>$menu_id]);
+
+      set_theme_mod('nav_menu_locations', ['primary_navigation' => $menu_id]);
 
       \WP_CLI::success('Primary Navigation created.');
     }
-    
+
     \WP_CLI::run_command(['rewrite', 'structure', $options['permalink-structure']]);
     \WP_CLI::run_command(['rewrite', 'flush']);
 
